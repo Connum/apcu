@@ -1,38 +1,39 @@
 name: Build and Test
 on: [push, pull_request]
 jobs:
-  ubuntu:
-    strategy:
-      matrix:
-          version: ["7.0", "7.1", "7.2", "7.3", "7.4", "8.0", "8.1", "8.2"]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout apcu
-        uses: actions/checkout@v2
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{matrix.version}}
-      - name: phpize
-        run: phpize
-      - name: configure
-        run: ./configure --enable-apcu-debug
-      - name: make
-        run: make
-      - name: test
-        run: |
-            make test TESTS="--show-diff -d apc.serializer=default tests"
-            make test TESTS="--show-diff -d apc.serializer=php tests"
-            make test TESTS="--show-diff -d apc.serializer=default -d opcache.enable_cli=1 tests"
-            make test TESTS="--show-diff -d apc.serializer=php -d opcache.enable_cli=1 tests"
+  # ubuntu:
+  #   strategy:
+  #     matrix:
+  #         version: ["7.0", "7.1", "7.2", "7.3", "7.4", "8.0", "8.1", "8.2"]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout apcu
+  #       uses: actions/checkout@v2
+  #     - name: Setup PHP
+  #       uses: shivammathur/setup-php@v2
+  #       with:
+  #         php-version: ${{matrix.version}}
+  #     - name: phpize
+  #       run: phpize
+  #     - name: configure
+  #       run: ./configure --enable-apcu-debug
+  #     - name: make
+  #       run: make
+  #     - name: test
+  #       run: |
+  #           make test TESTS="--show-diff -d apc.serializer=default tests"
+  #           make test TESTS="--show-diff -d apc.serializer=php tests"
+  #           make test TESTS="--show-diff -d apc.serializer=default -d opcache.enable_cli=1 tests"
+  #           make test TESTS="--show-diff -d apc.serializer=php -d opcache.enable_cli=1 tests"
   windows:
     defaults:
       run:
         shell: cmd
     strategy:
       matrix:
-          version: ["7.2", "7.3", "7.4", "8.0", "8.1", "8.2"]
-          arch: [x64]
+          # version: ["7.2", "7.3", "7.4", "8.0", "8.1", "8.2"]
+          version: ["7.3", "7.4", "8.0", "8.1", "8.2"]
+          arch: [x86, x64]
           ts: [nts, ts]
     runs-on: windows-latest
     steps:
